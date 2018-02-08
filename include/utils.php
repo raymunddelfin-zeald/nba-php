@@ -2,7 +2,7 @@
 
 // global connection object
 global $mysqli_db;
-$mysqli_db = new mysqli('localhost', 'root', '', 'employees');
+$mysqli_db = new mysqli('localhost', 'root', '', 'nba');
 
 /**
  * Simple method to generate a random employee id that

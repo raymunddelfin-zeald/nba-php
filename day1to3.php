@@ -1,5 +1,8 @@
 <?php
 
+include 'include/utils.php';
+
+include 'Models/Model.php';
 include 'Models/Player.php';
 
 function test() {
