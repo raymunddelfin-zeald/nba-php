@@ -24,6 +24,12 @@ function test() {
 		->set($data)
 		->save()
 		->describe();
+
+
+	$player = Player::get(1)
+		->set($data)
+		->save()
+		->describe();		
 }
 
 test();
