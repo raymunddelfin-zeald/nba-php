@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="include/template.js"></script>
+    <style type="text/css">
+        body, select, input, textarea {
+            font: normal 16px Helvetica, Arial;
+        }
+        h1:first-child {
+            margin-top: 0;
+        }
+        section {
+            padding: 20px;
+        }
+        section.filter {
+            border: solid 1px #ccc;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        section h1 {
+            font-size: 1.2em;
+            margin: 0 5px 0 0;
+            display: inline-block;
+        }
+        section.teams {
+            background: #efefef;
+        }
+        article.team {
+            width: 250px;
+            padding: 25px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+            float: left;
+        }
+        article.team h1 {
+            margin: 0;
+        }
+        .players {
+            list-style: none;
+            padding: 0px;
+        }
+        .players li {
+            margin: 5px 0;
+            padding: 10px 0;
+        }
+        select, input, textarea {
+            padding: 5px;
+        }
+        section.teams:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .player h3 {
+            font-size: 16px;
+        }
+    </style>
+    <script type="text/template" id="template-team">
+        <article class="team">
+            <h1 class="team-name"></h1>
+            <ul class="players"></ul>
+        </article>
+    </script>
+
+    <script type="text/template" id="template-player"></script>
+        <li class="player">
+            <h3 class="player-name"></h3>
+            <p class="player-points"></p>
+        </li>        
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            var workspace = $('.teams');
+
+            var leage = {
+                1: {
+                    name: 'Portland Trail Blazers',
+                    players: [
+                        {'player-name': 'Portland player 1', points: 45},
+                        {'player-name': 'Portland player 2', points: 45},
+                        {'player-name': 'Portland player 3', points: 45},
+                    ]
+                },
+                2: {
+                    name: 'Los Angeles Lakers',
+                    players: [
+                        {'player-name': 'Los Angeles player 1', points: 45},
+                        {'player-name': 'Los Angeles player 2', points: 45},
+                        {'player-name': 'Los Angeles player 3', points: 45},
+                    ]
+                },
+                3: {
+                    name: 'Dallas Mavericks',
+                    players: [
+                        {'player-name': 'Dallas player 1', points: 45},
+                        {'player-name': 'Dallas player 2', points: 45},
+                        {'player-name': 'Dallas player 3', points: 45},
+                    ]
+                }
+            };
+
+            $('#load-players').click(function(e) {
+                // e.preventDefault();
+                // var rosters = $( "select#team option:selected" ).val();
+                // var data = {
+                //     'team-name': leage[teamId].name,
+                // };
+                // new Template('template-team').
+                //     assign(data).
+                //     loop('player', leage[teamId].players).
+                //     assemble().
+                //     appendTo(workspace);
+
+
+            });
+
+            /** Player */
+            var Player = function($el, name, points) {
+                this.name = name;
+                this.points = points;
+                this.template = new Template('template-player');
+                this.assemble();
+            }
+            $.extend(Player.prototype, {
+                dom: function() {
+                    return this.assemble();
+                },
+                assemble: function() {
+                    var data = {
+                        'player-name': this.name,
+                        'player-points': this.points,
+                    };
+
+                    var content = this.template.
+                        assign(data).
+                        assemble();
+                        // appendTo(this.dom())
+                    
+                    return content;
+                }
+            });
+
+            /** Team */
+            var Team = function($el, name, playerData) {
+                $el = $el;
+                this.name = name;
+                this.rosters = [];
+                this.playerData = playerData;
+                this.template = new Template('template-team');
+                this.build();
+            }
+            $.extend(Team.prototype, {
+                dom: function() {
+                    return this.$el;
+                },
+                build: function() {
+                    var data = {
+                        'team-name': leage[teamId].name,
+                    };   
+                    this.template.assign(data).assemble().appendTo(this.dom());
+
+                    this.rosters.each(function(row) {
+                        var player = new Player(row['player-name'], row['points']);
+                        this.rosters.push(player);      
+                    });
+                }
+            });
+
+            /** Workspace */
+            var Workspace = function(teamId) {
+                this.teamId = teamId;
+            }
+            $.extend(Workspace.prototype, {
+                loadTeam: function() {
+                    var workspace = $('.teams');                    
+                    new Team(workspace, )
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<section class="filter">
+    <form>
+        <h1>Lookup Team</h1>
+        <select id="team">
+            <option value="1">Portland Trail Blazers</option>
+            <option value="2">Los Angeles Lakers</option>
+            <option value="3">Golden State Warriors</option>
+            <option value="4">Dallas Mavericks</option>
+            <option value="5">Houston Rockets</option>
+        </select>
+        <input type="submit" id="load-players" value="Lookup"/>
+    </form>
+</section>
+<section class="teams">
+
+</section>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>javascript prototyping</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+        <script type="text/javacript">
+            function Workspace($el) {
+                this.$el = $el;
+                return this;
+            }
+
+            $.extends(Workspace.prototype, {
+                append: function(content) {
+                    console.log("Append executed.")
+                    this.$el.appendTo(content);
+                },
+            });
+
+            $(document).ready(function() {
+                console.log("Document Loaded");
+                
+                var wp = new Workspace($('#container'));
+                wp.append("This the appended content");
+            });
+        </script>
+    </head>
+    <body>
+        <h1>javacript prototyping</h1>
+        <section id="container">Initial data</section>
+    </body>
+</html>
